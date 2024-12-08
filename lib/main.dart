@@ -1,7 +1,41 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-void main() {
-  runApp(const MyApp());
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:get/get.dart';
+import 'package:poin_of_sale/Helper/Log/LogApp.dart';
+import 'package:poin_of_sale/Helper/Service/initService.dart';
+import 'package:poin_of_sale/Helper/Translation/LanguageTranslation.dart';
+import 'package:poin_of_sale/Helper/Translation/TranslationController.dart';
+import 'package:poin_of_sale/View/Screen/getPages.dart/getPages.dart';
+import 'package:poin_of_sale/View/Screen/home_screen.dart';
+import 'package:poin_of_sale/View/style/SizeApp/ScreenSize.dart';
+import 'package:poin_of_sale/View/style/SizeApp/SizeBuilder.dart';
+
+Future<void> main() async {
+  await runZonedGuarded<Future<void>>(
+    () async {
+      // initialize the app Service
+      //! * here contains the firebase option  */
+      await InitService.instance.initService();
+
+      runApp(
+        MyApp(),
+        // DevicePreview(
+        //   enabled: !kReleaseMode,
+        //   builder: (context) =>  MyApp(), // Wrap your app
+        // ),
+      );
+    },
+    (
+      error,
+      stack,
+    ) =>
+        logError(
+      error.toString(),
+    ),
+  );
+  // if it's not on the web, windows or android,
+  // load the accent color
 }
 
 class MyApp extends StatelessWidget {
@@ -10,64 +44,24 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'أضغط ع الزر الجوة يزيد العداد  جواية ',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-            const SizedBox(
-              height: 40,
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    final c = Get.put(LanguageController());
+    return SizeBuilder(
+      baseSize: const Size(380, 720),
+      height: context.screenHeight,
+      width: context.screenWidth,
+      child: GetMaterialApp(
+       locale: c.language,
+      translations: Words(),
+        debugShowCheckedModeBanner: false,
+        getPages: getPages,
+        title: 'Flutter Demo',
+        home: FluentApp(
+          debugShowCheckedModeBanner: false,
+          theme: FluentThemeData(),
+          scrollBehavior: const ScrollBehavior(),
+          home: HomeScreen(),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
