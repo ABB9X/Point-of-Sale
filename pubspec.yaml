@@ -17,6 +17,11 @@ dependencies:
   shared_preferences: 
   flutter_svg:
   fluent_ui:
+  device_preview:
+  pdf: 
+  permission_handler:
+  path:
+  path_provider:  
 
 dev_dependencies:
   flutter_test:

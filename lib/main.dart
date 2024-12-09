@@ -15,14 +15,16 @@ Future<void> main() async {
   await runZonedGuarded<Future<void>>(
     () async {
       // initialize the app Service
-      //! * here contains the firebase option  */
+
       await InitService.instance.initService();
 
       runApp(
-        MyApp(),
+        const MyApp(),
         // DevicePreview(
         //   enabled: !kReleaseMode,
-        //   builder: (context) =>  MyApp(), // Wrap your app
+        //   builder: (context) => MyApp(),
+        //
+        // Wrap your app
         // ),
       );
     },
@@ -50,11 +52,12 @@ class MyApp extends StatelessWidget {
       height: context.screenHeight,
       width: context.screenWidth,
       child: GetMaterialApp(
-       locale: c.language,
-      translations: Words(),
+        locale: c.language,
+        translations: Words(),
         debugShowCheckedModeBanner: false,
         getPages: getPages,
         title: 'Flutter Demo',
+       
         home: FluentApp(
           debugShowCheckedModeBanner: false,
           theme: FluentThemeData(),
